@@ -1,14 +1,24 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>삼행시 생성기</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+
+    <h1>삼행시 생성기</h1>
+
+    <section>
+        <h2>단어를 입력하면 자동으로 시가 생성됩니다</h2>
+        <input type="text" id="word-input" placeholder="단어를 입력하세요 (예: 태용)" required>
+    </section>
+
+    <section id="poem-output">
+        <!-- Generated poem will appear here -->
+    </section>
+
+    <script src="main.js"></script>
 </body>
 </html>
