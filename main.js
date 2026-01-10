@@ -130,50 +130,71 @@ const URL = "https://teachablemachine.withgoogle.com/models/nBYS7nNTy/"; // User
 let model, labelContainer, maxPredictions;
 
 async function initTeachableMachine() {
+    console.log("initTeachableMachine called");
     const modelURL = URL + "model.json";
     const metadataURL = URL + "metadata.json";
 
-    // load the model and metadata
-    model = await tmImage.load(modelURL, metadataURL);
-    maxPredictions = model.getTotalClasses();
+    try {
+        // load the model and metadata
+        model = await tmImage.load(modelURL, metadataURL);
+        console.log("Model loaded successfully");
+        maxPredictions = model.getTotalClasses();
 
-    labelContainer = document.getElementById("label-container");
-    for (let i = 0; i < maxPredictions; i++) { // and class labels
-        labelContainer.appendChild(document.createElement("div"));
-    }
-    
-    // Setup file input
-    const imageUpload = document.getElementById("image-upload");
-    const uploadedImage = document.getElementById("uploaded-image");
-
-    imageUpload.addEventListener("change", (e) => {
-        if (e.target.files && e.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                uploadedImage.src = event.target.result;
-                uploadedImage.style.display = "block";
-            };
-            reader.readAsDataURL(e.target.files[0]);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement("div"));
         }
-    });
+        
+        // Setup file input
+        const imageUpload = document.getElementById("image-upload");
+        const uploadedImage = document.getElementById("uploaded-image");
+
+        imageUpload.addEventListener("change", (e) => {
+            console.log("Image upload change event triggered");
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    console.log("Image loaded into FileReader");
+                    uploadedImage.src = event.target.result;
+                    uploadedImage.style.display = "block";
+                    console.log("Image src set to:", uploadedImage.src.substring(0, 50) + "..."); // Log first 50 chars
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+        alert("모델이 로드되었습니다. 이미지를 업로드하고 '이미지 분석' 버튼을 누르세요.");
+    } catch (error) {
+        console.error("Error loading Teachable Machine model:", error);
+        alert("모델 로딩 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
+    }
 }
 
 async function predictUploadedImage() {
+    console.log("predictUploadedImage called");
     if (!model) {
         alert("Please load the model first.");
+        console.error("predictUploadedImage: Model not loaded");
         return;
     }
     const image = document.getElementById("uploaded-image");
     if (!image.src || image.src.endsWith("#")) {
         alert("Please upload an image first.");
+        console.error("predictUploadedImage: Image not uploaded");
         return;
     }
     
+    console.log("Predicting with image:", image.src.substring(0, 50) + "...");
     // Predicts the model for the uploaded image
-    const prediction = await model.predict(image);
-    for (let i = 0; i < maxPredictions; i++) {
-        const classPrediction =
-            prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-        labelContainer.childNodes[i].innerHTML = classPrediction;
+    try {
+        const prediction = await model.predict(image);
+        console.log("Prediction result:", prediction);
+        for (let i = 0; i < maxPredictions; i++) {
+            const classPrediction =
+                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            labelContainer.childNodes[i].innerHTML = classPrediction;
+        }
+    } catch (error) {
+        console.error("Error during prediction:", error);
+        alert("이미지 분석 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
     }
 }
