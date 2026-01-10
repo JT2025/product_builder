@@ -133,6 +133,9 @@ async function initTeachableMachine() {
     console.log("initTeachableMachine called");
     const modelURL = URL + "model.json";
     const metadataURL = URL + "metadata.json";
+    const loadModelBtn = document.querySelector("#teachable-machine-section .controls button[onclick='initTeachableMachine()']");
+    loadModelBtn.textContent = "모델 로딩 중...";
+    loadModelBtn.disabled = true;
 
     try {
         // load the model and metadata
@@ -162,15 +165,18 @@ async function initTeachableMachine() {
                 reader.readAsDataURL(e.target.files[0]);
             }
         });
-        alert("모델이 로드되었습니다. 이미지를 업로드하고 '이미지 분석' 버튼을 누르세요.");
+        loadModelBtn.textContent = "모델 로드 완료";
     } catch (error) {
         console.error("Error loading Teachable Machine model:", error);
+        loadModelBtn.textContent = "로드 실패";
         alert("모델 로딩 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
     }
 }
 
 async function predictUploadedImage() {
     console.log("predictUploadedImage called");
+    const predictBtn = document.querySelector("#teachable-machine-section .controls button[onclick='predictUploadedImage()']");
+
     if (!model) {
         alert("Please load the model first.");
         console.error("predictUploadedImage: Model not loaded");
@@ -183,9 +189,12 @@ async function predictUploadedImage() {
         return;
     }
     
+    predictBtn.textContent = "분석 중...";
+    predictBtn.disabled = true;
     console.log("Predicting with image:", image.src.substring(0, 50) + "...");
-    // Predicts the model for the uploaded image
+    
     try {
+        // Predicts the model for the uploaded image
         const prediction = await model.predict(image);
         console.log("Prediction result:", prediction);
         for (let i = 0; i < maxPredictions; i++) {
@@ -196,5 +205,8 @@ async function predictUploadedImage() {
     } catch (error) {
         console.error("Error during prediction:", error);
         alert("이미지 분석 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
+    } finally {
+        predictBtn.textContent = "이미지 분석";
+        predictBtn.disabled = false;
     }
 }

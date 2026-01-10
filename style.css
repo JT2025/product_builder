@@ -146,44 +146,62 @@ acrostic-poem {
     background-color: #004070;
 }
 
-#teachable-machine-section div {
-    margin: 10px 0;
+#teachable-machine-section .controls {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#teachable-machine-section button,
+#teachable-machine-section #image-upload {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#teachable-machine-section button:hover {
+    background-color: #0056b3;
+}
+
+#teachable-machine-section #image-upload {
+    background-color: #6c757d;
+}
+#teachable-machine-section #image-upload:hover {
+    background-color: #5a6268;
+}
+
+#uploaded-image-container {
+    margin-top: 15px;
+    min-height: 200px;
+    border: 2px dashed #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+#uploaded-image {
+    max-width: 100%;
+    max-height: 400px;
+    height: auto;
 }
 
 #label-container {
     margin-top: 15px;
-    font-size: 18px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: left;
 }
 
-#image-upload {
-    margin-bottom: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-#uploaded-image {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
-
-
-#image-upload {
-    margin-bottom: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-#uploaded-image {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
+#label-container div {
+    padding: 5px 0;
 }
 
 

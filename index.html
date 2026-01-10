@@ -82,12 +82,14 @@
     <section id="teachable-machine-section">
         <h2>AI 모델 체험</h2>
         <div>Teachable Machine 모델을 로드하고 실행합니다.</div>
-        <div>
+        <div class="controls">
+            <button type="button" onclick="initTeachableMachine()">모델 로드</button>
             <input type="file" id="image-upload" accept="image/*">
-            <img id="uploaded-image" width="320" style="display: none;"/>
+            <button type="button" onclick="predictUploadedImage()">이미지 분석</button>
         </div>
-        <button type="button" onclick="initTeachableMachine()">모델 로드</button>
-        <button type="button" onclick="predictUploadedImage()">이미지 분석</button>
+        <div id="uploaded-image-container">
+            <img id="uploaded-image" style="display: none;"/>
+        </div>
         <div id="label-container"></div>
     </section>
 
