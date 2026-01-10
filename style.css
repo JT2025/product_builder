@@ -27,6 +27,30 @@ form {
     margin-bottom: 20px;
 }
 
+#poem-length-selector {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+#poem-length-selector label {
+    display: inline-block;
+    cursor: pointer;
+}
+
+#poem-length-selector {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+#poem-length-selector label {
+    display: inline-block;
+    cursor: pointer;
+}
+
 #word-input {
     flex-grow: 1;
     padding: 10px;

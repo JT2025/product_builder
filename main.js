@@ -72,10 +72,16 @@ class AcrosticPoem extends HTMLElement {
 
 customElements.define('acrostic-poem', AcrosticPoem);
 
-document.getElementById('word-input').addEventListener('input', function(event) {
-    const word = event.target.value.trim();
+document.getElementById('generate-btn').addEventListener('click', function() {
+    const word = document.getElementById('word-input').value.trim();
+    const length = document.querySelector('input[name="poem-length"]:checked').value;
+
     if (word) {
-        generatePoem(word);
+        if (word.length < length) {
+            alert(`단어는 최소 ${length}자 이상이어야 합니다.`);
+            return;
+        }
+        generatePoem(word, length);
     }
 });
 
@@ -101,19 +107,20 @@ const koreanPoemLines = {
     '봇': '물처럼 쏟아지는 아이디어를 현실로!',
 };
 
-function generatePoem(word) {
+function generatePoem(word, length) {
     const poemOutput = document.getElementById('poem-output');
     const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(word);
+    const wordForPoem = word.substring(0, length);
     let lines;
 
     if (isKorean) {
-        lines = Array.from(word).map(letter => koreanPoemLines[letter] || '...');
+        lines = Array.from(wordForPoem).map(letter => koreanPoemLines[letter] || '...');
     } else {
-        lines = Array.from(word.toUpperCase()).map(letter => poemLines[letter] || '...');
+        lines = Array.from(wordForPoem.toUpperCase()).map(letter => poemLines[letter] || '...');
     }
 
     const poemElement = document.createElement('acrostic-poem');
-    poemElement.setAttribute('title', word);
+    poemElement.setAttribute('title', wordForPoem);
     poemElement.innerHTML = lines.map(line => `<div>${line}</div>`).join('\n');
 
     poemOutput.innerHTML = ''; // Clear previous poem
