@@ -145,3 +145,45 @@ acrostic-poem {
 #consultation-form button:hover {
     background-color: #004070;
 }
+
+#teachable-machine-section div {
+    margin: 10px 0;
+}
+
+#label-container {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+#image-upload {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#uploaded-image {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+
+#image-upload {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#uploaded-image {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+

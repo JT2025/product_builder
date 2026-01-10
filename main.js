@@ -123,3 +123,57 @@ document.getElementById('generate-btn').addEventListener('click', async function
         generateBtn.textContent = 'N행시 생성';
     }
 });
+
+// Teachable Machine model setup
+const URL = "https://teachablemachine.withgoogle.com/models/nBYS7nNTy/"; // User provided model URL
+
+let model, labelContainer, maxPredictions;
+
+async function initTeachableMachine() {
+    const modelURL = URL + "model.json";
+    const metadataURL = URL + "metadata.json";
+
+    // load the model and metadata
+    model = await tmImage.load(modelURL, metadataURL);
+    maxPredictions = model.getTotalClasses();
+
+    labelContainer = document.getElementById("label-container");
+    for (let i = 0; i < maxPredictions; i++) { // and class labels
+        labelContainer.appendChild(document.createElement("div"));
+    }
+    
+    // Setup file input
+    const imageUpload = document.getElementById("image-upload");
+    const uploadedImage = document.getElementById("uploaded-image");
+
+    imageUpload.addEventListener("change", (e) => {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                uploadedImage.src = event.target.result;
+                uploadedImage.style.display = "block";
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+}
+
+async function predictUploadedImage() {
+    if (!model) {
+        alert("Please load the model first.");
+        return;
+    }
+    const image = document.getElementById("uploaded-image");
+    if (!image.src || image.src.endsWith("#")) {
+        alert("Please upload an image first.");
+        return;
+    }
+    
+    // Predicts the model for the uploaded image
+    const prediction = await model.predict(image);
+    for (let i = 0; i < maxPredictions; i++) {
+        const classPrediction =
+            prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        labelContainer.childNodes[i].innerHTML = classPrediction;
+    }
+}
