@@ -37,6 +37,25 @@
         </form>
     </section>
 
+    <section id="consultation-form">
+        <h2>상담 날짜 선택</h2>
+        <form action="https://formspree.io/f/mdaandqy" method="POST">
+            <label for="consultation-name">이름 (선택 사항):</label>
+            <input type="text" id="consultation-name" name="name">
+
+            <label for="consultation-email">이메일:</label>
+            <input type="email" id="consultation-email" name="email" required>
+
+            <label for="consultation-date">희망 상담 날짜:</label>
+            <input type="date" id="consultation-date" name="consultation-date" required>
+
+            <label for="consultation-message">추가 메시지 (선택 사항):</label>
+            <textarea id="consultation-message" name="message"></textarea>
+
+            <button type="submit">상담 신청</button>
+        </form>
+    </section>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-functions.js"></script>
