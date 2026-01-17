@@ -123,11 +123,10 @@ document.getElementById('generate-btn').addEventListener('click', async function
 
         const poemElement = document.createElement('acrostic-poem');
         poemElement.setAttribute('title', word.substring(0, length));
-        poemElement.innerHTML = lines.map(line => `<div>${line}</div>`).join('\n');
+        poemElement.innerHTML = lines.join('\n');
 
         poemOutput.innerHTML = ''; // Clear previous poem
         poemOutput.appendChild(poemElement);
-        poemElement.render();
 
     } catch (error) {
         console.error("Error generating poem:", error);

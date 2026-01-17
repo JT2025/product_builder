@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <title>삼행시 생성기</title>
     <link rel="stylesheet" href="style.css">
     <meta name="google-adsense-account" content="ca-pub-3791906811849022">
@@ -52,19 +53,7 @@
             <button id="generate-btn">N행시 생성</button>
         </section>
 
-        <section id="poem-output">
-            <!-- Generated poem will appear here -->
-        </section>
-
-        <section id="teachable-machine-section">
-            <h2>AI 모델 체험</h2>
-            <div>Teachable Machine 모델을 로드하고 실행합니다.</div>
-            <div class="controls">
-                <button type="button" onclick="initTeachableMachine()">모델 로드</button>
-                <input type="file" id="image-upload" accept="image/*">
-                <button type="button" onclick="predictUploadedImage()">이미지 분석</button>
-            </div>
-            <div id="uploaded-image-container">
+        <section id="poem-output">2
                 <img id="uploaded-image" style="display: none;"/>
             </div>
             <div id="label-container"></div>

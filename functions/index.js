@@ -55,27 +55,39 @@ exports.generateAcrosticPoem = functions.https.onCall(async (data, context) => {
         try {
             poemLines = JSON.parse(text);
         } catch (jsonError) {
-            console.error("Failed to parse Gemini response as JSON:", text, jsonError);
+            console.warn("Failed to parse Gemini response as JSON, falling back to line splitting:", text, jsonError);
             // Fallback: If JSON parsing fails, try to split by lines
             poemLines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-            // Further clean-up if lines still include the starting character or other artifacts
-            poemLines = poemLines.map(line => {
-                const firstCharMatch = line.match(/^(\S+):?\s*(.*)/); // Match "Char: Line" or "Char Line"
-                return firstCharMatch ? firstCharMatch[2].trim() : line;
-            }).filter(line => line.length > 0);
         }
 
-        if (!Array.isArray(poemLines) || poemLines.length === 0) {
-            throw new functions.https.HttpsError('internal', 'Gemini model did not return a valid poem array.', text);
+        if (!Array.isArray(poemLines)) {
+             throw new functions.https.HttpsError('internal', 'Gemini model did not return a valid array structure.', text);
+        }
+
+        // Universal cleanup step to remove acrostic characters from the beginning of lines
+        const cleanedLines = poemLines.map(line => {
+            // This regex handles the first character, an optional colon, and whitespace
+            const match = line.match(/^(\S):?\s*(.*)/);
+            if (match && match[2] && word.toUpperCase().includes(match[1].toUpperCase())) {
+                 // Return the rest of the line if the first letter matches one of the word's letters
+                return match[2].trim();
+            }
+            return line.trim(); // Otherwise, return the line as is
+        }).filter(line => line.length > 0);
+
+
+        if (cleanedLines.length === 0) {
+            throw new functions.https.HttpsError('internal', 'Poem generation resulted in empty lines after cleaning.', text);
         }
         
         // Ensure the poem has the requested number of lines
-        while (poemLines.length < length) {
-            poemLines.push("..."); // Pad if Gemini returns fewer lines than requested
+        let finalPoem = cleanedLines;
+        while (finalPoem.length < length) {
+            finalPoem.push("..."); // Pad if Gemini returns fewer lines than requested
         }
-        poemLines = poemLines.slice(0, length); // Truncate if Gemini returns more lines than requested
+        finalPoem = finalPoem.slice(0, length); // Truncate if Gemini returns more lines
 
-        return { poem: poemLines };
+        return { poem: finalPoem };
     } catch (error) {
         console.error("Error calling Gemini API:", error);
         throw new functions.https.HttpsError('internal', 'Failed to generate poem from Gemini model.', error.message);
