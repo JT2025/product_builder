@@ -26,37 +26,6 @@ The AI will use Web Components to create encapsulated, reusable UI elements with
 * **Shadow DOM:** Encapsulate a component's HTML structure, styling, and behavior, preventing conflicts with the main document.
 * **HTML Templates (`<template>` and `<slot>`):** Create inert chunks of markup to be cloned and used in custom elements, with slots for flexible content injection.
 
-*Example of a simple Web Component:*
-
-```javascript
-// in main.js
-class SimpleGreeting extends HTMLElement {
-  constructor() {
-    super();
-    const shadow = this.attachShadow({ mode: 'open' });
-    const wrapper = document.createElement('span');
-    wrapper.setAttribute('class', 'wrapper');
-    const text = document.createElement('p');
-    text.textContent = `Hello, ${this.getAttribute('name') || 'World'}!`;
-    const style = document.createElement('style');
-    style.textContent = `
-      .wrapper {
-        padding: 15px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-      }
-    `;
-    shadow.appendChild(style);
-    shadow.appendChild(wrapper);
-    wrapper.appendChild(text);
-  }
-}
-customElements.define('simple-greeting', SimpleGreeting);
-
-// in index.html
-// <simple-greeting name="User"></simple-greeting>
-```
-
 ## **Modern CSS (Baseline Features)**
 
 The AI will use modern, widely supported CSS features to create responsive and maintainable styles.
@@ -78,23 +47,15 @@ The AI will write clean, efficient, and modern JavaScript.
 * **Promises:** Work with asynchronous results in a structured way.
 * **Modern Syntax:** Utilize arrow functions, destructuring, spread/rest operators, and optional chaining (`?.`).
 
-## **Advanced Capabilities**
+## **AdSense Optimization**
 
-### **3D Graphics with Three.js**
+The AI can optimize a website to improve its chances of being approved for Google AdSense. This includes:
 
-When 3D graphics are requested, the AI will use the **Three.js** library.
-
-* **Setup:** The AI will add Three.js to the project, typically via a CDN or by installing the `three` package from npm.
-* **Core Concepts:** The AI will create a `Scene`, a `Camera`, and a `WebGLRenderer`. It will add `Meshes` (geometry \+ material) to the scene and render the result.
-* **Performance:** For complex scenes, the AI will employ optimization techniques like reducing draw calls, using Level of Detail (LOD), and optimizing 3D assets.
-* **Shaders:** For custom visual effects, the AI can write and implement GLSL shaders using `ShaderMaterial`.
-
-### **High-Performance with WebAssembly (WASM)**
-
-For computationally intensive tasks, the AI can integrate WebAssembly modules.
-
-* **Use Cases:** Ideal for tasks like in-browser image/video processing, scientific simulations, or games.
-* **Integration:** The AI will load and instantiate the `.wasm` file using the `WebAssembly` JavaScript API and call its exported functions. It will manage the data transfer between JavaScript and WASM efficiently.
+*   **Improving Content Quality:** Enhancing the uniqueness and engagement of the content.
+*   **Enhancing User Experience (UX):** Improving the usability and design of the site.
+*   **Adding Trust Signals:** Including pages like "About Us" and "Privacy Policy".
+*   **Improving Site Navigation:** Implementing clear and intuitive navigation menus.
+*   **Code Quality:** Refactoring HTML, CSS, and JavaScript for better performance, maintainability, and use of modern standards.
 
 ## **Automated Error Detection & Remediation**
 
@@ -103,56 +64,26 @@ A critical function of the AI is to continuously monitor for and automatically r
 * **Post-Modification Checks:** After every code modification, the AI will:
   1. Monitor the IDE's diagnostics (problem pane) for errors.
   2. Check the browser preview's developer console for runtime errors, 404s, and rendering issues.
-* **Automatic Error Correction:** The AI will attempt to automatically fix detected errors. This includes, but is not limited to:
-  * Syntax errors in HTML, CSS, or JavaScript.
-  * Incorrect file paths in `<script>`, `<link>`, or `<img>` tags.
-  * Common JavaScript runtime errors.
-* **Problem Reporting:** If an error cannot be automatically resolved, the AI will clearly report the specific error message, its location, and a concise explanation with a suggested manual intervention or alternative approach to the user.
+* **Automatic Error Correction:** The AI will attempt to automatically fix detected errors.
+* **Problem Reporting:** If an error cannot be automatically resolved, the AI will clearly report the issue to the user.
 
 ## **Visual Design**
 
 **Aesthetics:** The AI always makes a great first impression by creating a unique user experience that incorporates modern components, a visually balanced layout with clean spacing, and polished styles that are easy to understand.
 
-1. Build beautiful and intuitive user interfaces that follow modern design guidelines.
-2. Ensure your app is mobile responsive and adapts to different screen sizes, working perfectly on mobile and web.
-3. Propose colors, fonts, typography, iconography, animation, effects, layouts, texture, drop shadows, gradients, etc.
-4. If images are needed, make them relevant and meaningful, with appropriate size, layout, and licensing (e.g., freely available). If real images are not available, provide placeholder images.
-5. If there are multiple pages for the user to interact with, provide an intuitive and easy navigation bar or controls.
-
-**Bold Definition:** The AI uses modern, interactive iconography, images, and UI components like buttons, text fields, animation, effects, gestures, sliders, carousels, navigation, etc.
-
-1. Fonts \- Choose expressive and relevant typography. Stress and emphasize font sizes to ease understanding, e.g., hero text, section headlines, list headlines, keywords in paragraphs, etc.
-2. Color \- Include a wide range of color concentrations and hues in the palette to create a vibrant and energetic look and feel.
-3. Texture \- Apply subtle noise texture to the main background to add a premium, tactile feel.
-4. Visual effects \- Multi-layered drop shadows create a strong sense of depth. Cards have a soft, deep shadow to look "lifted."
-5. Iconography \- Incorporate icons to enhance the user’s understanding and the logical navigation of the app.
-6. Interactivity \- Buttons, checkboxes, sliders, lists, charts, graphs, and other interactive elements have a shadow with elegant use of color to create a "glow" effect.
-
-## **Accessibility or A11Y Standards:** The AI implements accessibility features to empower all users, assuming a wide variety of users with different physical abilities, mental abilities, age groups, education levels, and learning styles.
+## **Accessibility or A11Y Standards:** The AI implements accessibility features to empower all users.
 
 ## **Iterative Development & User Interaction**
 
 The AI's workflow is iterative, transparent, and responsive to user input.
 
-* **Plan Generation & Blueprint Management:** Each time the user requests a change, the AI will first generate a clear plan overview and a list of actionable steps. This plan will then be used to **create or update a blueprint.md file** in the project's root directory.
-  * The `blueprint.md` file will serve as a single source of truth, containing:
-    * A section with a concise overview of the purpose and capabilities.
-    * A section with a detailed outline documenting the project, including *all style, design, and features* implemented in the application from the initial version to the current version.
-    * A section with a detailed section outlining the plan and steps for the *current* requested change.
-    *
-  * Before initiating any new change, the AI will reference the `blueprint.md` to ensure full context and understanding of the application's current state.
-* **Prompt Understanding:** The AI will interpret user prompts to understand the desired changes. It will ask clarifying questions if the prompt is ambiguous.
-* **Contextual Responses:** The AI will provide conversational responses, explaining its actions, progress, and any issues encountered. It will summarize changes made.
-* **Error Checking Flow:**
-  1. **Code Change:** AI applies a code modification.
-  2. **Dependency Check:** If a `package.json` was modified, AI runs `npm install`.
-  3. **Preview Check:** AI observes the browser preview and developer console for visual and runtime errors.
-  4. **Remediation/Report:** If errors are found, AI attempts automatic fixes. If unsuccessful, it reports details to the user.
-
+* **Plan Generation & Blueprint Management:** The AI uses a `blueprint.md` file to maintain a plan and document the project.
+* **Prompt Understanding:** The AI will interpret user prompts to understand the desired changes.
+* **Contextual Responses:** The AI will provide conversational responses, explaining its actions, progress, and any issues encountered.
 
 # Firebase MCP
 
-When requested for Firebase add the following the server configurations to .idx/mcp.json. Just add the following and don't add anything else.
+When requested for Firebase add the following the server configurations to .idx/mcp.json.
 
 {
     "mcpServers": {

@@ -1,3 +1,7 @@
+// =================================================================================
+// Acrostic Poem Web Component
+// =================================================================================
+
 class AcrosticPoem extends HTMLElement {
     constructor() {
         super();
@@ -51,7 +55,7 @@ class AcrosticPoem extends HTMLElement {
                 }
                 return '';
             }).join('');
-        } else if (lines.length > 0) { // If no title but lines exist, just display lines
+        } else if (lines.length > 0) {
             poemHTML = lines.map(line => `<p>${line}</p>`).join('');
         }
         
@@ -73,6 +77,7 @@ class AcrosticPoem extends HTMLElement {
                     alert('Poem copied to clipboard!');
                 }).catch(err => {
                     console.error('Failed to copy text: ', err);
+                    alert('Could not copy poem to clipboard. Please check browser permissions.');
                 });
             });
         }
@@ -80,6 +85,11 @@ class AcrosticPoem extends HTMLElement {
 }
 
 customElements.define('acrostic-poem', AcrosticPoem);
+
+
+// =================================================================================
+// Firebase Cloud Function for Poem Generation
+// =================================================================================
 
 const functions = firebase.functions();
 const generateAcrosticPoemCallable = functions.httpsCallable('generateAcrosticPoem');
@@ -91,21 +101,25 @@ document.getElementById('generate-btn').addEventListener('click', async function
     const poemOutput = document.getElementById('poem-output');
 
     if (!word) {
-        alert('단어를 입력하세요.');
+        alert('Please enter a word to generate a poem.');
         return;
     }
     if (word.length < length) {
-        alert(`단어는 최소 ${length}자 이상이어야 합니다.`);
+        alert(`The word must be at least ${length} characters long.`);
         return;
     }
 
     generateBtn.disabled = true;
-    generateBtn.textContent = '생성 중...';
-    poemOutput.innerHTML = '<p>시를 생성 중입니다...</p>';
+    generateBtn.textContent = 'Generating...';
+    poemOutput.innerHTML = '<p>Generating your poem...</p>';
 
     try {
         const result = await generateAcrosticPoemCallable({ word: word.substring(0, length), length: parseInt(length) });
-        const lines = result.data.poem; // Assuming the Cloud Function returns { poem: string[] }
+        const lines = result.data.poem;
+
+        if (!lines || lines.length === 0) {
+            throw new Error('No poem was generated. Please try a different word.');
+        }
 
         const poemElement = document.createElement('acrostic-poem');
         poemElement.setAttribute('title', word.substring(0, length));
@@ -117,86 +131,77 @@ document.getElementById('generate-btn').addEventListener('click', async function
 
     } catch (error) {
         console.error("Error generating poem:", error);
-        poemOutput.innerHTML = `<p style="color: red;">시 생성 중 오류 발생: ${error.message}</p>`;
+        poemOutput.innerHTML = `<p style="color: red;">An error occurred while generating the poem: ${error.message}</p>`;
     } finally {
         generateBtn.disabled = false;
-        generateBtn.textContent = 'N행시 생성';
+        generateBtn.textContent = 'Generate N-Poem';
     }
 });
 
-// Teachable Machine model setup
-const URL = "https://teachablemachine.withgoogle.com/models/nBYS7nNTy/"; // User provided model URL
+
+// =================================================================================
+// Teachable Machine Model Integration
+// =================================================================================
+
+const URL = "https://teachablemachine.withgoogle.com/models/nBYS7nNTy/";
 
 let model, labelContainer, maxPredictions;
 
 async function initTeachableMachine() {
-    console.log("initTeachableMachine called");
     const modelURL = URL + "model.json";
     const metadataURL = URL + "metadata.json";
     const loadModelBtn = document.querySelector("#teachable-machine-section .controls button[onclick='initTeachableMachine()']");
-    loadModelBtn.textContent = "모델 로딩 중...";
+    loadModelBtn.textContent = "Loading Model...";
     loadModelBtn.disabled = true;
 
     try {
-        // load the model and metadata
         model = await tmImage.load(modelURL, metadataURL);
-        console.log("Model loaded successfully");
         maxPredictions = model.getTotalClasses();
 
         labelContainer = document.getElementById("label-container");
-        for (let i = 0; i < maxPredictions; i++) { // and class labels
+        for (let i = 0; i < maxPredictions; i++) {
             labelContainer.appendChild(document.createElement("div"));
         }
         
-        // Setup file input
         const imageUpload = document.getElementById("image-upload");
         const uploadedImage = document.getElementById("uploaded-image");
 
         imageUpload.addEventListener("change", (e) => {
-            console.log("Image upload change event triggered");
             if (e.target.files && e.target.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    console.log("Image loaded into FileReader");
                     uploadedImage.src = event.target.result;
                     uploadedImage.style.display = "block";
-                    console.log("Image src set to:", uploadedImage.src.substring(0, 50) + "..."); // Log first 50 chars
                 };
                 reader.readAsDataURL(e.target.files[0]);
             }
         });
-        loadModelBtn.textContent = "모델 로드 완료";
+        loadModelBtn.textContent = "Model Loaded";
     } catch (error) {
         console.error("Error loading Teachable Machine model:", error);
-        loadModelBtn.textContent = "로드 실패";
-        alert("모델 로딩 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
+        loadModelBtn.textContent = "Load Failed";
+        alert("There was an error loading the AI model. Please check the console for details.");
     }
 }
 
 async function predictUploadedImage() {
-    console.log("predictUploadedImage called");
     const predictBtn = document.querySelector("#teachable-machine-section .controls button[onclick='predictUploadedImage()']");
 
     if (!model) {
         alert("Please load the model first.");
-        console.error("predictUploadedImage: Model not loaded");
         return;
     }
     const image = document.getElementById("uploaded-image");
     if (!image.src || image.src.endsWith("#")) {
         alert("Please upload an image first.");
-        console.error("predictUploadedImage: Image not uploaded");
         return;
     }
     
-    predictBtn.textContent = "분석 중...";
+    predictBtn.textContent = "Analyzing...";
     predictBtn.disabled = true;
-    console.log("Predicting with image:", image.src.substring(0, 50) + "...");
     
     try {
-        // Predicts the model for the uploaded image
         const prediction = await model.predict(image);
-        console.log("Prediction result:", prediction);
         for (let i = 0; i < maxPredictions; i++) {
             const classPrediction =
                 prediction[i].className + ": " + prediction[i].probability.toFixed(2);
@@ -204,9 +209,9 @@ async function predictUploadedImage() {
         }
     } catch (error) {
         console.error("Error during prediction:", error);
-        alert("이미지 분석 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
+        alert("An error occurred during image analysis. Please check the console for details.");
     } finally {
-        predictBtn.textContent = "이미지 분석";
+        predictBtn.textContent = "Analyze Image";
         predictBtn.disabled = false;
     }
 }

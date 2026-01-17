@@ -5,93 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>삼행시 생성기</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="google-adsense-account" content="ca-pub-3791906811849022">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3791906811849022"
+     crossorigin="anonymous"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6JVG6256TQ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-6JVG6256TQ');
+    </script>
+    <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "v2q201kg5n");
+</script>
 </head>
 <body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#poem-generator">N행시 생성기</a></li>
+                <li><a href="#teachable-machine-section">AI 모델 체험</a></li>
+                <li><a href="#contact-form">피드백</a></li>
+                <li><a href="#consultation-form">상담 신청</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#privacy">Privacy Policy</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <h1>N행시 생성기</h1>
+    <main>
+        <h1>N행시 생성기</h1>
 
-    <section>
-        <h2>단어를 입력하면 자동으로 시가 생성됩니다</h2>
-        <div id="poem-length-selector">
-            <label><input type="radio" name="poem-length" value="3" checked> 3행시</label>
-            <label><input type="radio" name="poem-length" value="5"> 5행시</label>
-        </div>
-        <input type="text" id="word-input" placeholder="단어를 입력하세요" required>
-        <button id="generate-btn">N행시 생성</button>
-    </section>
+        <section id="poem-generator">
+            <h2>단어를 입력하면 자동으로 시가 생성됩니다</h2>
+            <div id="poem-length-selector">
+                <label><input type="radio" name="poem-length" value="3" checked> 3행시</label>
+                <label><input type="radio" name="poem-length" value="5"> 5행시</label>
+            </div>
+            <input type="text" id="word-input" placeholder="단어를 입력하세요" required>
+            <button id="generate-btn">N행시 생성</button>
+        </section>
 
-    <section id="poem-output">
-        <!-- Generated poem will appear here -->
-    </section>
+        <section id="poem-output">
+            <!-- Generated poem will appear here -->
+        </section>
 
-    <section id="contact-form">
-        <h2>피드백 보내기</h2>
-        <form action="https://formspree.io/f/mdaandqy" method="POST">
-            <label for="name">이름:</label>
-            <input type="text" id="name" name="name" required>
-            <label for="email">이메일:</label>
-            <input type="email" id="email" name="email" required>
-            <label for="message">메시지:</label>
-            <textarea id="message" name="message" required></textarea>
-            <button type="submit">보내기</button>
-        </form>
-    </section>
+        <section id="teachable-machine-section">
+            <h2>AI 모델 체험</h2>
+            <div>Teachable Machine 모델을 로드하고 실행합니다.</div>
+            <div class="controls">
+                <button type="button" onclick="initTeachableMachine()">모델 로드</button>
+                <input type="file" id="image-upload" accept="image/*">
+                <button type="button" onclick="predictUploadedImage()">이미지 분석</button>
+            </div>
+            <div id="uploaded-image-container">
+                <img id="uploaded-image" style="display: none;"/>
+            </div>
+            <div id="label-container"></div>
+        </section>
 
-    <section id="consultation-form">
-        <h2>상담 날짜 선택</h2>
-        <form action="https://formspree.io/f/mdaandqy" method="POST">
-            <label for="consultation-name">이름 (선택 사항):</label>
-            <input type="text" id="consultation-name" name="name">
+        <section id="contact-form">
+            <h2>피드백 보내기</h2>
+            <form action="https://formspree.io/f/mdaandqy" method="POST">
+                <label for="name">이름:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">메시지:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit">보내기</button>
+            </form>
+        </section>
 
-            <label for="consultation-email">이메일:</label>
-            <input type="email" id="consultation-email" name="email" required>
+        <section id="consultation-form">
+            <h2>상담 날짜 선택</h2>
+            <form action="https://formspree.io/f/mdaandqy" method="POST">
+                <label for="consultation-name">이름 (선택 사항):</label>
+                <input type="text" id="consultation-name" name="name">
 
-            <label for="consultation-date">희망 상담 날짜:</label>
-            <input type="date" id="consultation-date" name="consultation-date" required>
+                <label for="consultation-email">이메일:</label>
+                <input type="email" id="consultation-email" name="email" required>
 
-            <label for="consultation-message">추가 메시지 (선택 사항):</label>
-            <textarea id="consultation-message" name="message"></textarea>
+                <label for="consultation-date">희망 상담 날짜:</label>
+                <input type="date" id="consultation-date" name="consultation-date" required>
 
-            <button type="submit">상담 신청</button>
-        </form>
-    </section>
+                <label for="consultation-message">추가 메시지 (선택 사항):</label>
+                <textarea id="consultation-message" name="message"></textarea>
 
-    <section id="disqus_thread_section">
-        <h2>댓글</h2>
-        <div id="disqus_thread"></div>
-        <script>
-            /**
-            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-            
-            var disqus_config = function () {
-            this.page.url = window.location.href;  // Replace PAGE_URL with your page's canonical URL variable
-            this.page.identifier = window.location.href; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-            };
-            
-            (function() { // DON'T EDIT BELOW THIS LINE
-            var d = document, s = d.createElement('script');
-            s.src = 'https://name-rns9clcvoo.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    </section>
+                <button type="submit">상담 신청</button>
+            </form>
+        </section>
 
-    <section id="teachable-machine-section">
-        <h2>AI 모델 체험</h2>
-        <div>Teachable Machine 모델을 로드하고 실행합니다.</div>
-        <div class="controls">
-            <button type="button" onclick="initTeachableMachine()">모델 로드</button>
-            <input type="file" id="image-upload" accept="image/*">
-            <button type="button" onclick="predictUploadedImage()">이미지 분석</button>
-        </div>
-        <div id="uploaded-image-container">
-            <img id="uploaded-image" style="display: none;"/>
-        </div>
-        <div id="label-container"></div>
-    </section>
+        <section id="disqus_thread_section">
+            <h2>댓글</h2>
+            <div id="disqus_thread"></div>
+            <script>
+                /**
+                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATPLATFORM OR CMS.
+                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+                
+                var disqus_config = function () {
+                this.page.url = window.location.href;  // Replace PAGE_URL with your page's canonical URL variable
+                this.page.identifier = window.location.href; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
+                
+                (function() { // DON'T EDIT BELOW THIS LINE
+                var d = document, s = d.createElement('script');
+                s.src = 'https://name-rns9clcvoo.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </section>
+        
+        <section id="about">
+            <h2>About Us</h2>
+            <p>We are a team of passionate developers dedicated to creating fun and interactive web applications. Our goal is to provide high-quality content and a great user experience.</p>
+        </section>
+
+        <section id="privacy">
+            <h2>Privacy Policy</h2>
+            <p>This website respects your privacy. We do not collect any personal information other than what you provide in the contact and consultation forms. The information you provide is used solely for the purpose of responding to your inquiries and is not shared with third parties. This site uses Google AdSense for advertising, which may use cookies to serve ads based on a user's prior visits to this website or other websites. You can opt out of personalized advertising by visiting Ads Settings.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 N-Poem Generator. All rights reserved.</p>
+    </footer>
 
     <!-- Teachable Machine Model scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
